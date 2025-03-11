@@ -4,8 +4,8 @@
         { "src": "index.py", "use": "@vercel/python" }
     ],
     "routes": [
-        { "src": "/edit_event/<int:event_id>", "dest": "index.py" },
-        { "src": "//delete_event/<int:event_id>", "dest": "index.py" },
+        { "src": "/edit_event", "dest": "index.py" },
+        { "src": "/delete_event", "dest": "index.py" },
         { "src": "/", "dest": "index.py" }
     ]
 }
