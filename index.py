@@ -19,7 +19,7 @@ def edit_event(event_id):
     data = request.json
 
     # Validate required fields
-    required_fields = ['title', 'event_date', 'event_time']
+    required_fields = ['name', 'description', 'location', 'date', 'time']
     for field in required_fields:
         if field not in data:
             return jsonify({"error": f"{field} is required"}), 400
@@ -30,9 +30,11 @@ def edit_event(event_id):
         return jsonify({"error": "Event not found"}), 404
 
     # Update the event
-    event['title'] = data['title']
-    event['event_date'] = data['event_date']
-    event['event_time'] = data['event_time']
+    event['title'] = data['name']
+    event['description'] = data['description']
+    event['location'] = data['location']
+    event['event_date'] = data['date']
+    event['event_time'] = data['time']
 
     return jsonify({
         "success": True,
