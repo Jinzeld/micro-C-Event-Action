@@ -1,0 +1,11 @@
+{
+    "version": 2,
+    "builds": [
+        { "src": "index.py", "use": "@vercel/python" }
+    ],
+    "routes": [
+        { "src": "/edit_event", "dest": "index.py" },
+        { "src": "/delete_event", "dest": "index.py" },
+        { "src": "/", "dest": "index.py" }
+    ]
+}
