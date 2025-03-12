@@ -1,21 +1,14 @@
 from flask import Flask, request, jsonify
-from datetime import datetime, timedelta
+from datetime import datetime
 
 app = Flask(__name__)
 
 # In-memory storage for events (replace with a database in production)
 events = []
 
-# Helper function to find an event by ID
-def find_event_by_id(event_id):
-    for event in events:
-        if event['event_id'] == event_id:
-            return event
-    return None
-
-# Edit an event
-@app.route('/edit_event/<int:event_id>', methods=['PUT'])
-def edit_event(event_id):
+# Endpoint to receive event data and respond with a success message
+@app.route('/save_event', methods=['POST'])
+def save_event():
     # Get JSON data from the request
     data = request.json
 
@@ -25,24 +18,27 @@ def edit_event(event_id):
         if field not in data:
             return jsonify({"success": False, "error": f"{field} is required"}), 400
 
-    # Find the event by ID
-    event = find_event_by_id(event_id)
-    if not event:
-        return jsonify({"success": False, "error": "Event not found"}), 404
+    # Log the event data (or save it to a database)
+    event = {
+        "title": data['name'],
+        "description": data['description'],
+        "location": data['location'],
+        "event_date": data['date'],
+        "event_time": data['time'],
+        "created_at": datetime.now().isoformat()  # Add a timestamp
+    }
+    events.append(event)  # Add to in-memory storage (replace with database logic)
 
-    # Update the event
-    event['title'] = data['name']
-    event['description'] = data['description']
-    event['location'] = data['location']
-    event['event_date'] = data['date']
-    event['event_time'] = data['time']
+    # Log the event data (for debugging)
+    print(f"Received event data: {event}")
 
-    # Return a success response
+    # Return a success response with the event data
     return jsonify({
         "success": True,
-        "message": "Event updated successfully.",
+        "message": "Event data received and processed successfully.",
         "event": event
-    })
+    }), 200
+
 
 # Delete an event
 @app.route('/delete_event/<int:event_id>', methods=['DELETE'])
