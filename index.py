@@ -16,18 +16,19 @@ def find_event_by_id(event_id):
 # Edit an event
 @app.route('/edit_event/<int:event_id>', methods=['PUT'])
 def edit_event(event_id):
+    # Get JSON data from the request
     data = request.json
 
     # Validate required fields
     required_fields = ['name', 'description', 'location', 'date', 'time']
     for field in required_fields:
         if field not in data:
-            return jsonify({"error": f"{field} is required"}), 400
+            return jsonify({"success": False, "error": f"{field} is required"}), 400
 
     # Find the event by ID
     event = find_event_by_id(event_id)
     if not event:
-        return jsonify({"error": "Event not found"}), 404
+        return jsonify({"success": False, "error": "Event not found"}), 404
 
     # Update the event
     event['title'] = data['name']
@@ -36,6 +37,7 @@ def edit_event(event_id):
     event['event_date'] = data['date']
     event['event_time'] = data['time']
 
+    # Return a success response
     return jsonify({
         "success": True,
         "message": "Event updated successfully.",
